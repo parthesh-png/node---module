@@ -2,8 +2,14 @@
 const fs = require('fs')
 
 // const index = fs.readFileSync('index3.html','utf-8') //not usihng as we r doing with mooongse
+const path = require('path')
 
-const data = JSON.parse(fs.readFileSync('data.json','utf-8'))
+// const dataPath = path.join(__dirname, '..', 'public', 'data.json');
+
+// const data = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+
+
+const data = JSON.parse(fs.readFileSync(path.resolve(__dirname,'../data.json'),'utf-8'))
 const users = data.users  //connect with user data only in json /,scva  
 
 exports. createUser = (req,res)=>{
