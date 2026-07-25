@@ -12,8 +12,12 @@ router                            //we can write "server" too for running
 
 .post('/', productController.createProduct)
 
+.get('/ssr',productController. getAllProductsSSR)
+
 //read get product
 .get('/',productController. getAllProducts)
+
+
 
 //read get product / id;
 .get('/:id',productController. getProduct)
@@ -25,6 +29,8 @@ router                            //we can write "server" too for running
 .patch('/:id',productController. updateProduct)
 
 //Delete /products/"id"
-.delete('/:id',productController. deleteProducts);
+.delete('/:id',productController. deleteProducts)
+
+
 
 exports.router = router;

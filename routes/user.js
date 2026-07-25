@@ -2,7 +2,7 @@
 const express = require ('express');
 const userController = require('../controller/user')
 
-const router = express.Router();
+const router = express.Router();  //This creates a router object.
 
 
 
@@ -27,4 +27,4 @@ router                            //we can write "server" too for running
 //Delete /products/"id"
 .delete('/:id',userController. deleteUsers);
 
-exports.router = router;
+exports.router = router;    //Left router - Name of the exported property.Right router → Your variable.

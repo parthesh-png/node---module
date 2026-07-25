@@ -49,7 +49,8 @@ server.use('/users',userRouter.router)
 
 //catch-all-route - any route render this , must be in last 
 server.use((req,res)=>{
-    res.sendFile(path.resolve(__dirname,'build','index.html'))  //Sends a file to browser
+   res.sendFile(path.resolve(__dirname,'build','index.html'))  //Sends a file to browser
+  
 })
 
 console.log('env',process.env.DB_PASSWORD)
@@ -80,7 +81,7 @@ console.log('env',process.env.DB_PASSWORD)
 // .delete('/products/:id',productController. deleteProducts);
  
 server.get('/',(req,res)=>{
-    //res.send('hello')  //for html hello in LH
+   // res.send('hello')  //for html hello in LH
     //res.sendFile('C:\Users\parth\OneDrive\Desktop\node js\index3.html') //for showing file
      //res.json(products)  //for showing data in file
     // res.sendStatus(404)

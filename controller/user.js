@@ -1,5 +1,7 @@
 
 const fs = require('fs')
+const model = require('../model/user')
+const mongoose = require('mongoose')
 
 // const index = fs.readFileSync('index3.html','utf-8') //not usihng as we r doing with mooongse
 const path = require('path')
@@ -9,46 +11,79 @@ const path = require('path')
 // const data = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
 
 
-const data = JSON.parse(fs.readFileSync(path.resolve(__dirname,'../data.json'),'utf-8'))
-const users = data.users  //connect with user data only in json /,scva  
+//const data = JSON.parse(fs.readFileSync(path.resolve(__dirname,'../data.json'),'utf-8'))
+//const users = data.users  //connect with user data only in json /,scva  
 
-exports. createUser = (req,res)=>{
-    console.log(req.body)  
-    users.push(req.body)   //kind of controller
-   res.status(201).res.json(req.body)
-}
+const User = model.User;
+const jwt = require('jwt'); 
 
-  
-exports. getAllUsers = (req,res) => {
-    
-    res.json(users) 
-}
+// CREATE
+exports.createUser = async (req, res) => {
+    try {
+        const user = new User(req.body);
+        const savedUser = await user.save();
+        res.status(201).json(savedUser);
+    } catch (err) {
+        res.status(400).json(err);
+    }
+};
 
-exports. getUsers =(req,res) => {
-    const id =+req.params.id;
-     const user = users.find(p=>p.id===id); //find always method take parameter for searching basis
-     res.json(user) 
-   
-}
-exports. replaceUsers=(req,res) => {
-    const id =+req.params.id;
-     const userIndex = users.findIndex(p=>p.id===id);
-     users.splice(userIndex,1,{...req.body,id:id})
-     res.status(201).json();
+// GET ALL
+exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
 
-}
-exports. updateUsers =(req,res) =>{
-    const id =+req.params.id
-    const userIndex = users.findIndex(p => p.id === id)
+// GET ONE
+exports.getUsers = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        res.json(user);
+    } catch (err) {
+        res.status(404).json(err);
+    }
+};
 
-    const user = users[userIndex]; //- for old product
-    users.splice(userIndex,1,{...user,...req.body})
-    res.status(201).json();
-}
-exports. deleteUsers=(req,res) => {
-    const id =+req.params.id;
-     const userIndex = users.findIndex(p=>p.id===id);
+// REPLACE (PUT)
+exports.replaceUsers = async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true, overwrite: true }
+        );
 
-      const user = users[userIndex];
-     users.splice(userIndex,1)
-     res.status(201).json(user)}
+        res.json(user);
+    } catch (err) {
+        res.status(400).json(err);
+    }
+};
+
+// UPDATE (PATCH)
+exports.updateUsers = async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+
+        res.json(user);
+    } catch (err) {
+        res.status(400).json(err);
+    }
+};
+
+// DELETE
+exports.deleteUsers = async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        res.json(user);
+    } catch (err) {
+        res.status(400).json(err);
+    }
+};

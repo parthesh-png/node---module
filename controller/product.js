@@ -3,12 +3,35 @@ const fs = require('fs')
 const model = require('../model/product')
 const Product = model.Product;
  const mongoose = require('mongoose');
+ const ejs = require('ejs');
+ const path = require('path');
 
 // const index = fs.readFileSync('index3.html','utf-8')
 
 //no need after moongse
 // const data = JSON.parse(fs.readFileSync('data.json','utf-8'))
 // const products = data.products
+
+
+// VIEW 
+
+//__dirname = current folder of the file being executed.
+
+exports.getAllProductsSSR = async(req,res)=>{
+  const products = await Product.find();
+
+
+  //Open an EJS file and generate HTML from it.
+  
+  ejs.renderFile(path.resolve(__dirname,'../page/index.ejs'), {products:products}, function(err, str){
+    // str => Rendered HTML string
+     res.send(str);
+});
+  
+ 
+}
+
+
 
 
 
@@ -46,7 +69,7 @@ const saved = await product.save();   //this save data in database , save is asy
   
 exports. getAllProducts = async(req,res) => {
 
-  const products =  await Product.find() //for mongoose  it show all db 
+   const products =  await Product.find() //for mongoose  it show all db 
 
 
 // for conditional - view

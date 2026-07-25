@@ -5,7 +5,7 @@
 
 
 const productSchema = new Schema({
-   title: {type:String,required:true},  // String  shortcut {type: String}
+ title: {type:String,required:true},  // String  shortcut {type: String}
       description: String,
       price:{type:Number,min:[0,'wrong price'],required: true},
       discountPercentage: {type:Number,min:[0,'wrong min discount'], max:[50,'wrong max discount']},
@@ -18,9 +18,8 @@ const productSchema = new Schema({
 
 });
 
-
-exports.Product = mongoose.model('Product',productSchema);
-
+  //create a Model from the Schema because only the Model can perform database operations like:
+exports.Product = mongoose.model('Product',productSchema);    //product is collection name that will create automatically after plural
 
 
 
