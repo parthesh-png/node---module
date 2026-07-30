@@ -1,17 +1,17 @@
 
-require('dotenv').config()
-
+require('dotenv').config()  //Go find the .env file, read every variable inside it, and put them into process.env."
+                            //The recommended approach is to call it once, usually in the entry file:
 const express = require('express');
-const path = require('path');
+
  const morgan=require('morgan')  //third party middlewar
  const mongoose = require('mongoose');
  const cors = require('cors')
- 
-
-
-
+ const fs =require('fs')
+ const path = require('path');
+ const jwt = require('jsonwebtoken')
+ const authRouter=require('./routes/auth')
+ const publicKey = fs.readFileSync(path.resolve(__dirname,'./public.key'),'utf-8')
 const server = express();
-
 const productRouter = require('./routes/product')
 const userRouter = require('./routes/user')
 console.log('env',process.env.DB_PASSWORD);
@@ -37,14 +37,38 @@ async function main() {
 // const productRouter=express.Router();
 
 //body parser (middle ware)
+
+const auth =(req,res,next)=>{
+   const token =  req.get('Authorization').split('Bearer ')[1];
+   console.log(token)
+
+   try {
+            var decoded = jwt.verify(token,publicKey)
+             if(decoded.email){  //if decoded has email avilable
+                next()   //without this other route  will not work 
+              }else{
+                  res.sendStatus(401)
+                     }
+
+   } catch(err){
+    res.sendStatus(401)  //it show unaruthorise in postman 
+
+   }
+   
+    console.log(decoded)
+
+   
+}
 server.use(cors())
 server.use(express.json())
 server.use(morgan('default'))
 //express.static only auto-loads:index.html;
  server.use(express.static(path.resolve(__dirname,process.env.PUBLIC_DIR))); //at 8080 ,it tell run public file 
-server.use('/products',productRouter.router);  //middle ware for attaching router and server
 
-server.use('/users',userRouter.router)
+ server.use('/auth',authRouter.router)
+server.use('/products',auth,productRouter.router);  //middle ware for attaching router and server
+
+server.use('/users',auth,userRouter.router)
 
 
 //catch-all-route - any route render this , must be in last 

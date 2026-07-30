@@ -15,18 +15,22 @@ const path = require('path')
 //const users = data.users  //connect with user data only in json /,scva  
 
 const User = model.User;
-const jwt = require('jwt'); 
+// const jwt = require('jsonwebtoken'); 
 
-// CREATE
-exports.createUser = async (req, res) => {
-    try {
-        const user = new User(req.body);
-        const savedUser = await user.save();
-        res.status(201).json(savedUser);
-    } catch (err) {
-        res.status(400).json(err);
-    }
-};
+// // CREATE
+// exports.createUser = async (req, res) => {
+//     try {
+//         const user = new User(req.body);
+
+//         var token = jwt.sign({ email: req.body.email }, process.env.SECRET);
+//         user.token=token  //Dot (.) means access or create a property on an object.
+
+//         const savedUser = await user.save();
+//         res.status(201).json(savedUser);
+//     } catch (err) {
+//         res.status(400).json(err);
+//     }
+// };
 
 // GET ALL
 exports.getAllUsers = async (req, res) => {

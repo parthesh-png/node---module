@@ -10,7 +10,7 @@ const router = express.Router();  //This creates a router object.
 
 router                            //we can write "server" too for running
 
-.post('/', userController. createUser)
+// .post('/', userController. createUser)
 
 //read get product
 .get('/',userController. getAllUsers)
