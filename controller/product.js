@@ -68,15 +68,31 @@ const saved = await product.save();   //this save data in database , save is asy
 //for
   
 exports. getAllProducts = async(req,res) => {
+     let query = Product.find() //for mongoose  it show all db 
+     let pageSize=4;
+     let page=req.query.page;
+     console.log(req.query)
 
-   const products =  await Product.find() //for mongoose  it show all db 
+     if(req.query.sort){ //soert + paging 
+   const products =  await query.sort({[req.query.sort]:req.query.order}).skip(pageSize*(page-1)).limit(pageSize).exec()
+         
 
-
-// for conditional - view
-        // const products =  await Product.find({price : {$gt:500}})  //it shows only whiose proce is 500 greater 
+           // for conditional - view
+                  // const products =  await Product.find({price : {$gt:500}})  //it shows only whiose proce is 500 greater 
 
     
     res.json(products) 
+     }
+  else if(req.query.page) {
+    const products = await query.skip(pageSize*(page-1)).limit(pageSize).exec()
+    res.json(products)
+
+}else{   //it is important , as in staring it need all the , without this server load only 4 no paging 1,2,3,4 show,
+  const products = await query.exec()
+  res.json(products)
+
+}
+
 }
 
 
